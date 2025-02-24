@@ -1,0 +1,37 @@
+# Terraform files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraformrc
+terraform.rc
+.terraform.lock.hcl
+crash.log
+crash.*.log
+
+# Local .terraform directories
+.terraform/
+terraform-aws-eks
+terraform-provider-aws
+
+# Norel specific
+norel/.terraform/
+norel/terraform.tfstate
+norel/terraform.tfstate.backup
+norel/.terraform.lock.hcl
+
+# OS specific
+.DS_Store
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json 
