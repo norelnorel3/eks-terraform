@@ -107,11 +107,17 @@ resource "aws_ec2_tag" "security_group_discovery" {
 }
 
 # Apply Karpenter EC2NodeClass
-resource "kubectl_manifest" "karpenter_config" {
+resource "kubectl_manifest" "karpenter_nodeclass" {
   yaml_body = templatefile("${path.module}/ec2nodeclass.yaml", {
     cluster_name = var.cluster_name
     node_iam_role_name = module.karpenter.node_iam_role_name
   })
+
+  # Wait 1 minute after Karpenter Helm release
+  provisioner "local-exec" {
+    command = "sleep 60"
+  }
+
   depends_on = [
     helm_release.karpenter,
     aws_eks_cluster.main,
@@ -125,8 +131,14 @@ resource "kubectl_manifest" "karpenter_config" {
 # Apply Karpenter NodePool
 resource "kubectl_manifest" "karpenter_nodepool" {
   yaml_body = file("${path.module}/nodepool.yaml")
+
+  # Wait 30 seconds after NodeClass
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+
   depends_on = [
-    kubectl_manifest.karpenter_config,
+    kubectl_manifest.karpenter_nodeclass,
     helm_release.karpenter,
     aws_eks_cluster.main,
     aws_eks_node_group.main,
