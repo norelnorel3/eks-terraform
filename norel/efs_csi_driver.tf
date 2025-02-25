@@ -61,7 +61,9 @@ resource "helm_release" "aws_efs_csi_driver" {
 
   depends_on = [
     kubernetes_service_account.efs_csi_controller,
-    aws_iam_role.efs_csi_driver
+    aws_iam_role.efs_csi_driver,
+    module.efs,
+    aws_eks_node_group.main
   ]
 }
 

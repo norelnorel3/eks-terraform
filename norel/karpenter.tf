@@ -34,7 +34,8 @@ resource "helm_release" "karpenter" {
 
   depends_on = [
     aws_eks_cluster.main,
-    module.karpenter
+    module.karpenter,
+    aws_eks_node_group.main
   ]
 }
 
@@ -47,8 +48,9 @@ module "karpenter" {
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
 
   cluster_name = var.cluster_name
+  iam_role_name = "KarpenterController-${var.cluster_name}"
   enable_irsa = true
-  node_iam_role_name = var.cluster_name
+  node_iam_role_name = "KarpenterNodeRole-${var.cluster_name}"
   create_pod_identity_association = false
   create_instance_profile = true
   enable_spot_termination = true
@@ -89,15 +91,47 @@ module "karpenter" {
 # Get AWS account ID
 data "aws_caller_identity" "karpenter" {}
 
-# Apply Karpenter Configuration - after all other resources are ready
+# Tag subnets for Karpenter discovery
+resource "aws_ec2_tag" "subnet_discovery" {
+  for_each    = toset(var.subnet_ids)
+  resource_id = each.value
+  key         = "karpenter.sh/discovery"
+  value       = var.cluster_name
+}
+
+# Tag security group for Karpenter discovery
+resource "aws_ec2_tag" "security_group_discovery" {
+  resource_id = aws_security_group.cluster.id
+  key         = "karpenter.sh/discovery"
+  value       = var.cluster_name
+}
+
+# Apply Karpenter EC2NodeClass
 resource "kubectl_manifest" "karpenter_config" {
-  yaml_body = templatefile("${path.module}/karpenter.yaml", {
+  yaml_body = templatefile("${path.module}/ec2nodeclass.yaml", {
     cluster_name = var.cluster_name
+    node_iam_role_name = module.karpenter.node_iam_role_name
   })
   depends_on = [
     helm_release.karpenter,
     aws_eks_cluster.main,
     aws_eks_node_group.main,
-    module.karpenter
+    module.karpenter,
+    aws_ec2_tag.subnet_discovery,
+    aws_ec2_tag.security_group_discovery
+  ]
+}
+
+# Apply Karpenter NodePool
+resource "kubectl_manifest" "karpenter_nodepool" {
+  yaml_body = file("${path.module}/nodepool.yaml")
+  depends_on = [
+    kubectl_manifest.karpenter_config,
+    helm_release.karpenter,
+    aws_eks_cluster.main,
+    aws_eks_node_group.main,
+    module.karpenter,
+    aws_ec2_tag.subnet_discovery,
+    aws_ec2_tag.security_group_discovery
   ]
 }

@@ -1,20 +1,3 @@
----
-apiVersion: karpenter.k8s.aws/v1
-kind: EC2NodeClass
-metadata:
-  name: default
-spec:
-  amiSelectorTerms:
-    - alias: bottlerocket@latest
-  subnetSelectorTerms:
-    - tags:
-        kubernetes.io/cluster/${cluster_name}: owned
-  securityGroupSelectorTerms:
-    - tags:
-        kubernetes.io/cluster/${cluster_name}: owned
-  tags:
-    karpenter.sh/discovery: ${cluster_name}
----
 apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
