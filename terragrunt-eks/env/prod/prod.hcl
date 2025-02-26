@@ -1,7 +1,8 @@
 # Production environment configuration
-include {
-  path = find_in_parent_folders()
-}
+# Direct reference to root terragrunt.hcl
+# include {
+#   path = "../../root.hcl"
+# }
 
 locals {
   environment = "production"

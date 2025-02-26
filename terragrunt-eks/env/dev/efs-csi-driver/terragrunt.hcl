@@ -1,21 +1,5 @@
-include "env" {
-  path = "../prod.hcl"
-  expose = true  
-}
-
-include "root" {
-  path = "../../../root.hcl"
-  expose = true  
-}
-
-# Include Kubernetes providers - only for modules that interact with an existing cluster
-include "k8s_providers" {
-  path = "../../../k8s_providers.hcl"
-  expose = true
-}
-
-terraform {
-  source = "../../../modules/efs-csi-driver"
+include {
+  path = find_in_parent_folders()
 }
 
 dependency "eks" {
@@ -27,10 +11,10 @@ dependency "efs" {
 }
 
 inputs = {
-  cluster_name     = include.env.locals.cluster_name
+  cluster_name     = local.cluster_name
   oidc_provider_url = dependency.eks.outputs.oidc_provider_url
   efs_id           = dependency.efs.outputs.id
-  tags             = include.env.locals.common_tags
+  tags             = local.common_tags
 }
 
 locals {
