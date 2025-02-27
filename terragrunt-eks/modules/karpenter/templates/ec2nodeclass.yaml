@@ -3,14 +3,14 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
-  role: "${node_iam_role_name}"
+  role: "KarpenterNodeRole-norel-eks-cluster-20250227200341046900000005"
   amiSelectorTerms:
     - alias: "al2023@v20250212"
   subnetSelectorTerms:
     - tags:
-        karpenter.sh/discovery: "${cluster_name}"
+        karpenter.sh/discovery: "norel-eks-cluster"
   securityGroupSelectorTerms:
     - tags:
-        karpenter.sh/discovery: "${cluster_name}"
+        karpenter.sh/discovery: "norel-eks-cluster"
   tags:
-    karpenter.sh/discovery: "${cluster_name}" 
+    karpenter.sh/discovery: "norel-eks-cluster" 
