@@ -78,5 +78,5 @@ EOF
 # Define common locals
 locals {
   aws_region   = "eu-west-1"
-  cluster_name = "norel-eks-cluster"  # Default value, can be overridden in environment config
+  # cluster_name = "norel-eks-cluster"  # Default value, can be overridden in environment config
 } 

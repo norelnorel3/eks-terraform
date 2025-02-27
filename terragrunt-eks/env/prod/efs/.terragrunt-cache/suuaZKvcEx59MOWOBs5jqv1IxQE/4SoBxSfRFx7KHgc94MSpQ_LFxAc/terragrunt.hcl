@@ -9,7 +9,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../modules/efs"
+  source = "../../../modules/eks"
 }
 
 dependency "eks" {
