@@ -1,14 +1,14 @@
 # Production environment configuration
 # Direct reference to root terragrunt.hcl
-include {
-  path = "${get_parent_terragrunt_dir()}/terragrunt.hcl"
-}
+# include {
+#   path = "../../root.hcl"
+# }
 
 locals {
   environment = "production"
   
   # EKS cluster configuration
-  cluster_name    = "norel-eks-cluster"
+  cluster_name    = "prod-eks-cluster"
   cluster_version = "1.29"
   
   # VPC configuration
@@ -17,7 +17,7 @@ locals {
   subnet_ids = ["subnet-02d62dcb60871aeab", "subnet-04bb48e5b37a0affe"]
   
   # Node group configuration
-  node_group_name = "norel-node-group"
+  node_group_name = "prod-node-group"
   instance_types  = ["t3.medium"]
   
   # Common tags

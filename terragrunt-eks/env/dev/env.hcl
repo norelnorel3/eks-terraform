@@ -5,10 +5,10 @@
 # }
 
 locals {
-  environment = "production"
+  environment = "development"
   
   # EKS cluster configuration
-  cluster_name    = "norel-eks-cluster"
+  cluster_name    = "dev-eks-cluster"
   cluster_version = "1.29"
   
   # VPC configuration
@@ -17,7 +17,7 @@ locals {
   subnet_ids = ["subnet-02d62dcb60871aeab", "subnet-04bb48e5b37a0affe"]
   
   # Node group configuration
-  node_group_name = "norel-node-group"
+  node_group_name = "dev-node-group"
   instance_types  = ["t3.medium"]
   
   # Common tags

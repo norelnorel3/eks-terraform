@@ -1,19 +1,3 @@
-# Root terragrunt.hcl file
-remote_state {
-  backend = "s3"
-  config = {
-    bucket         = "norel-terragrunt-state"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = "eu-west-1"
-    encrypt        = true
-    dynamodb_table = "norel-terragrunt-locks"
-  }
-  generate = {
-    path      = "backend.tf"
-    if_exists = "overwrite_terragrunt"
-  }
-}
-
 # Generate provider configurations
 generate "provider" {
   path      = "provider.tf"
@@ -64,16 +48,6 @@ terraform {
 EOF
 }
 
-# Generate data_sources.tf
-# generate "data_sources" {
-#   path      = "data_sources.tf"
-#   if_exists = "overwrite_terragrunt"
-#   contents  = <<EOF
-# data "aws_eks_cluster" "cluster" {
-#   name = "${local.cluster_name}"
-# }
-# EOF
-# }
 
 # Define common locals
 locals {

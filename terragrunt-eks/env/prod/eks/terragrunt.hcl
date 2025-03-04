@@ -1,13 +1,17 @@
 include "env" {
-  path = "../prod.hcl"
+  path = "../env.hcl"
   expose = true  
 }
 
-include "root" {
-  path = "../../../root.hcl"
+include "backend" {
+  path = "../../../backend.hcl"
   expose = true  
 }
 
+include "providers" {
+  path = "../../../providers.hcl"
+  expose = true  
+}
 terraform {
   source = "../../../modules/eks"
 }
