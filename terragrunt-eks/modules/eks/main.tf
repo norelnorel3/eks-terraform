@@ -72,21 +72,6 @@ resource "aws_security_group" "cluster" {
   description = "Security group for EKS cluster"
   vpc_id      = var.vpc_id
 
-  ingress {
-    description = "Allow all inbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = merge(
     var.tags,
     {
@@ -94,6 +79,30 @@ resource "aws_security_group" "cluster" {
       "karpenter.sh/discovery" = var.cluster_name
     }
   )
+}
+
+# Create ingress rules
+resource "aws_vpc_security_group_ingress_rule" "cluster_ingress" {
+  count = length(var.ingress_rules)
+  
+  security_group_id = aws_security_group.cluster.id
+  description       = var.ingress_rules[count.index].description
+  from_port         = var.ingress_rules[count.index].from_port
+  to_port           = var.ingress_rules[count.index].to_port
+  ip_protocol       = var.ingress_rules[count.index].protocol
+  cidr_ipv4         = var.ingress_rules[count.index].cidr_blocks[0]
+}
+
+# Create egress rules
+resource "aws_vpc_security_group_egress_rule" "cluster_egress" {
+  count = length(var.egress_rules)
+  
+  security_group_id = aws_security_group.cluster.id
+  description       = var.egress_rules[count.index].description
+  from_port         = var.egress_rules[count.index].from_port
+  to_port           = var.egress_rules[count.index].to_port
+  ip_protocol       = var.egress_rules[count.index].protocol
+  cidr_ipv4         = var.egress_rules[count.index].cidr_blocks[0]
 }
 
 # Node Group Resources

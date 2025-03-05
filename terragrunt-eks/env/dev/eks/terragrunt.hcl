@@ -12,6 +12,7 @@ include "providers" {
   path = "../../../providers.hcl"
   expose = true  
 }
+
 terraform {
   source = "../../../modules/eks"
 }
@@ -23,7 +24,11 @@ inputs = {
   subnet_ids      = include.env.locals.subnet_ids
   node_group_name = include.env.locals.node_group_name
   instance_types  = include.env.locals.instance_types
-  tags     = include.env.locals.common_tags
+  tags            = include.env.locals.common_tags
+  
+  # Use security group rules from env.hcl
+  ingress_rules = include.env.locals.security_group_ingress_rules
+  egress_rules  = include.env.locals.security_group_egress_rules
 }
 
 # locals {

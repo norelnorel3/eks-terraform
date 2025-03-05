@@ -20,6 +20,39 @@ locals {
   node_group_name = "dev-node-group"
   instance_types  = ["t3.medium"]
   
+  # Security group rules
+  security_group_ingress_rules = [
+    {
+      description = "Allow HTTPS from anywhere"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      description = "Allow SSH access"
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["10.0.0.0/8"]  # Restrict SSH to internal network
+    },
+    {
+      description = "Allow custom application port"
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = ["172.16.0.0/12"]
+    }
+  ]
+  
+  security_group_egress_rules = [
+    {
+      description = "Allow all outbound traffic"
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+  
   # Common tags
   common_tags = {
     Environment = local.environment

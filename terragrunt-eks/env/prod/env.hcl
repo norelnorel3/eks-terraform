@@ -26,4 +26,23 @@ locals {
     Terraform   = "true"
     Project     = local.cluster_name
   }
+
+  # Security group rules
+  security_group_ingress_rules = [
+    {
+      description = "Allow HTTPS from anywhere"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  security_group_egress_rules = [
+    {
+      description = "Allow all outbound traffic"
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 } 
