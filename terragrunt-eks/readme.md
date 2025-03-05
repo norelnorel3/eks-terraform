@@ -1,10 +1,19 @@
-# Terragrunt EKS Deployment
+# EKS Cluster with EFS and Karpenter - Terragrunt Deployment
 
-## Creator
-Norel Milihov
+This repository contains a Terragrunt deployment for an AWS EKS cluster with EFS storage and Karpenter autoscaling.
+
+## Created and Maintained by
+
+**Norel Milihov**
 
 ## Overview
-This directory contains Terragrunt configurations for deploying and managing an EKS cluster with supporting infrastructure.
+
+This Terragrunt configuration deploys:
+
+- Amazon EKS cluster
+- EFS file system with CSI driver
+- Karpenter for node autoscaling
+- Multi-environment support (dev/prod)
 
 ## Components
 - EKS Cluster
@@ -17,8 +26,6 @@ This directory contains Terragrunt configurations for deploying and managing an 
 - Terragrunt >= 0.45.0
 - AWS CLI configured with appropriate credentials
 - S3 bucket for remote state (configured in backend.hcl)
-
-
 
 ## Structure
 - `modules/` - Reusable Terraform modules

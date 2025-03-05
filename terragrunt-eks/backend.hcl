@@ -1,4 +1,6 @@
 # Root terragrunt.hcl file
+# Created and maintained by Norel Milihov
+
 remote_state {
   backend = "s3"
   config = {

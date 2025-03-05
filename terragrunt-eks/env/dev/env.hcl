@@ -1,8 +1,5 @@
-# Production environment configuration
-# Direct reference to root terragrunt.hcl
-# include {
-#   path = "../../root.hcl"
-# }
+# Development environment configuration
+# Created and maintained by Norel Milihov
 
 locals {
   environment = "development"
@@ -58,5 +55,6 @@ locals {
     Environment = local.environment
     Terraform   = "true"
     Project     = local.cluster_name
+    Maintainer  = "Norel Milihov"
   }
 } 

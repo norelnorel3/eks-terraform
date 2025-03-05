@@ -1,10 +1,13 @@
+# Providers configuration
+# Created and maintained by Norel Milihov
+
 # Generate provider configurations
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "${local.aws_region}"
+  region = "eu-west-1"
 }
 
 provider "aws" {

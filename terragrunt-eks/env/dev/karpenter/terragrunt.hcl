@@ -43,3 +43,5 @@ inputs = {
   cluster_security_group_id = dependency.eks.outputs.cluster_security_group_id
   tags                      = include.env.locals.common_tags
 }
+
+##@!
