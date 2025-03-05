@@ -25,15 +25,17 @@ module "efs" {
   
   security_group_description = "${var.cluster_name} EFS security group"
   security_group_vpc_id     = var.vpc_id
+  
+  # Use security group rules with source_security_group_id instead of CIDR blocks
   security_group_rules = {
-    eks_nodes = {
-      # Allow inbound NFS traffic from EKS nodes security group
-      description = "Allow NFS inbound from EKS nodes"
-      type        = "ingress"
-      from_port   = 2049
-      to_port     = 2049
-      protocol    = "tcp"
-      cidr_blocks = [var.vpc_cidr]
+    eks_cluster = {
+      # Allow inbound NFS traffic from EKS cluster security group
+      description              = "Allow NFS inbound from EKS cluster"
+      type                     = "ingress"
+      from_port                = 2049
+      to_port                  = 2049
+      protocol                 = "tcp"
+      source_security_group_id = var.cluster_security_group_id
     }
   }
 

@@ -23,6 +23,11 @@ variable "node_role_name" {
   type        = string
 }
 
+variable "cluster_security_group_id" {
+  description = "Security group ID of the EKS cluster"
+  type        = string
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
